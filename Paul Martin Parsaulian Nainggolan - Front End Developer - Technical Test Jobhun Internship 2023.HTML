@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TV Shows</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+</head>
+<body>
+    <h1><center>Data TV Shows</center></h1>
+  <div id="app">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4" v-for="show in shows">
+          <div class="card">
+            <img :src="show.image.medium" class="card-img-top" alt="Show Poster">
+            <div class="card-body">
+              <h5 class="card-title">{{ show.name }}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.min.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        shows: []
+      },
+      mounted: function() {
+        this.fetchData();
+      },
+      methods: {
+        fetchData: function() {
+          var self = this;
+          fetch('http://api.tvmaze.com/search/shows?q=girls')
+            .then(response => response.json())
+            .then(data => {
+              self.shows = data.map(function(show) {
+                return show.show;
+              });
+            })
+            .catch(error => console.error(error));
+        }
+      }
+    });
+  </script>
+</body>
+</html>
